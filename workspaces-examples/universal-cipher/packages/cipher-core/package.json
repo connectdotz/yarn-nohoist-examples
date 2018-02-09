@@ -1,0 +1,31 @@
+{
+  "name": "cipher-core",
+  "version": "1.0.0",
+  "main": "index.js",
+  "private": true,
+  "dependencies": {},
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-jest": "^22.1.0",
+    "babel-preset-env": "^1.6.1",
+    "jest": "^22.1.4",
+    "uglifyjs-webpack-plugin": "^1.1.8",
+    "webpack": "^3.10.0",
+    "webpack-node-externals": "^1.6.0"
+  },
+  "scripts": {
+    "build": "webpack",
+    "test": "jest"
+  },
+  "jest": {
+    "moduleFileExtensions": ["js"],
+    "testRegex": "(\\.(test|spec))\\.(js)$",
+    "testPathIgnorePatterns": [
+      "\\.snap$",
+      "../../node_modules",
+      "<rootDir>/node_modules/",
+      "<rootDir>/lib/",
+      "<rootDir>/dist/"
+    ]
+  }
+}

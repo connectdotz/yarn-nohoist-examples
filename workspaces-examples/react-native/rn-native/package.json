@@ -1,0 +1,10 @@
+{
+  "name": "rn-native",
+  "version": "1.0.0",
+  "description": "create a native react-native app",
+  "private": true,
+  "workspaces": {
+    "packages": ["packages/*"],
+    "nohoist": ["**/react-native", "**/react-native/**"]
+  }
+}

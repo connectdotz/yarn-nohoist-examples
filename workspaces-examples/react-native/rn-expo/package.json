@@ -1,0 +1,17 @@
+{
+  "name": "ra-expo",
+  "version": "1.0.0",
+  "description": "create a expo based react-native app",
+  "private": true,
+  "workspaces": {
+    "packages": ["packages/*"],
+    "nohoist": [
+      "**/react-native",
+      "**/react-native/**",
+      "**/react-native-scripts",
+      "**/react-native-scripts/**",
+      "**/expo",
+      "**/expo/**"
+    ]
+  }
+}
