@@ -2,10 +2,10 @@
 
 Goal: Create a react-native app in yarn workspaces using `create-react-native-app` (see react-native [Getting Started](https://facebook.github.io/react-native/docs/getting-started.html) for when and why you want to use this method to create the react-native app)
 
-## step-1 setup the workspaces
-Follow the general setup for [react-native workspaces](../README.md) first. 
+## step-1 setup the workspaces config
+Follow the configuration setup for [react-native workspaces](../README.md#common-configuration). 
 
-There are 2 other extra steps we had to do here:
+There are 2 other things we had to do here:
 
 1. This installation method depends on react-native-script and expo packages, which unfortunately don't play well in the monorepo environment as of today (01/2018), therefore we had to add them into our nohoist list as well:
 ```
@@ -26,7 +26,7 @@ There are 2 other extra steps we had to do here:
 go to the "packages" directory, follow the react-native quick-start guide to prepare your environment, then create the app:
 ```
 $pwd
-XXX/react-native-with-yarn/demo/workspaces-expo
+.../workspaces-examples/react-native/rn-expo
 $ cd packages
 $ create-react-native-app MyApp
 ```

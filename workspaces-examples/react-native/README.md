@@ -2,9 +2,9 @@
 
 ## Introduction
 
-This repository was originally used to test the [nohoist](https://github.com/yarnpkg/yarn/pull/4979) implementation of [yarn](https://github.com/yarnpkg/yarn). The goal is to create a react-native project within the workspaces as seamless as a stand-alone project. 
+This repository was originally used to test the [nohoist](https://github.com/yarnpkg/yarn/pull/4979) implementation of [yarn](https://github.com/yarnpkg/yarn). The goal is to create a react-native project within the workspaces as seamless as a standalone project. 
 
-1. [rn-native](rn-native/README.md) - use yarn nohoist to create a default app with `react-native init`. 
+1. [rn-native](rn-native) - use yarn nohoist to create a default app with `react-native init`. 
 1. [rn-expo](rn-expo) - use yarn nohoist to create a default expo app with `create-react-native-app`.
 
 ## What is the problem?
