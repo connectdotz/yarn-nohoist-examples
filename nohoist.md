@@ -1,6 +1,6 @@
 # nohoist for yarn workspaces
 
-Monorepo is gaining popularity as complexity and modularization of our software grow. As wonderful as [yarn workspaces](https://yarnpkg.com/blog/2017/08/02/introducing-workspaces/), the reset of the community hasn't yet fully caught up with its new hoisting scheme. While there are no lack of workarounds to bridge the gap, they are often convoluted, simply because they have to maneuver around the actual end points: package-manager and the libraries. The introduction of the [nohoist](https://github.com/yarnpkg/yarn/pull/4979) is the attempt to provide an easy-to-use mechanism, natively supported by the yarn, to enable workspaces working with otherwise incompatible libraries. We hope this feature would ease the pain for monorepo developers and strike a balance between efficiency (hoisting as much as possible) and usability (unblock the libraries who haven't been adapted for workspaces). 
+Monorepo is gaining popularity as complexity and modularization of our software grow. As wonderful as [yarn workspaces](https://yarnpkg.com/blog/2017/08/02/introducing-workspaces/), the reset of the community hasn't yet fully caught up with its new hoisting scheme. While there are no lack of workarounds to bridge the gap, they are often complex and convoluted, simply because they had to maneuver around the actual end points: package-manager and the libraries. The introduction of the [nohoist](https://github.com/yarnpkg/yarn/pull/4979) is the attempt to provide an easy-to-use mechanism, natively supported by yarn, to enable workspaces working with otherwise incompatible libraries. We hope this feature would ease the pain for monorepo developers and strike a balance between efficiency (hoisting as much as possible) and usability (unblock the libraries who haven't been adapted for workspaces). 
 
 ## What is the problem ?
 
@@ -10,16 +10,16 @@ To reduce redundancy, most package managers employ some kind of hoisting scheme 
 
 ![standalone-2](resources/standalone-2.svg)
 
-With hoist, we were able to eliminate duplicate "A@1.0" and "B@1.0", while maintaining the same root `package-1/node_modules`. Most module crawlers/loaders/bundlers can locate modules pretty efficiently by traversing down the "node_modules" tree from the root. 
+With hoist, we were able to eliminate duplicate "A@1.0" and "B@1.0", while preserving version variation (B@2.0) and maintaining the same root `package-1/node_modules`. Most module crawlers/loaders/bundlers can locate modules pretty efficiently by traversing down the "node_modules" tree from the project root. 
 
 Then came the monorepo project, which introduced a new hierarchical structure that is not necessary linked by "node_modules". In such project, modules could be scattered in multiple locations: 
 
 ![monorepo-2](resources/monorepo-2.svg)
 
-yarn workspaces can share modules across child projects/packages by hoisting them up to their parent project's node_modules: `monorepo/node_modules`. The optimization becomes even more prominent when child projects/packages start to depends on each other, a common pattern in monorepo projects.
+yarn workspaces can share modules across child projects/packages by hoisting them up to their parent project's node_modules: `monorepo/node_modules`. This optimization becomes even more prominent when considering these packages will most likely be dependent on each other (the main reason to have the monorepo), i.e. higher degree of redundancy.
 
 ### module not found!!
-While it might appear that we can access all modules from the project's root node_modules, we often build each package in its local project, where the modules might not be visible under its own node_modules. In addition, not all the crawlers traverse symlinks. 
+While it might appear that we can access all modules from the project's root node_modules, we often build each package in its local project, where the modules might not be visible under its own node_modules. In addition, not all crawlers traverse [symlinks](https://github.com/facebook/metro/issues/1). 
 
 Consequently, workspaces developers often witness "module not found" related error when building from the child project:
   - can't find module "B@2.0" from project root "monorepo" (not able to follow symlink)
@@ -28,30 +28,31 @@ Consequently, workspaces developers often witness "module not found" related err
 For this monorepo project to reliably find any module from anywhere, it needs to traverse each node_modules tree: _"monorepo/node_modules"_ and _"monorepo/packages/package-1/node_modules"_ . 
 
 ## why can't they be fixed?
+
 There are indeed many ways library owners can address these issues, such as multi-root, custom module map, clever traversing scheme, among others... However,
 1. not all the 3rd party libraries have the resource to adapt for monorepo environment
 1. the weekest link problem: javascript is great thanks to the massive 3rd-party libraries. However, that also means the complex tool chain is only as strong as the weakest link. A single non-adapted package deep down the tool chain could render the whole tool useless. 
-1. the bootstrap problems: for example, react-native has provided a way to configure multi-root through "rn-cli.config.js". But it won't help the bootstrap process like "react-native init" or "create-react-native-app", which has no access of any such tooling before the app is created/installed. 
+1. the bootstrap problems: for example, react-native has provided a way to configure multi-root through `rn-cli.config.js`. But it won't help the bootstrap process like `react-native init` or `create-react-native-app`, which has no access of any such tooling before the app is created/installed. 
 
-It is frustrating when a solution worked for a standalone project only fell short in the monorepo environment. Ideally, the solution lies in addressing the underlying libraries as mentioned above, but the reality is far from perfect and we all know that our projects can't wait and life has to go on...  
+It is frustrating when a solution worked for a standalone project only fell short in the monorepo environment. The ideal solution lies in addressing the underlying libraries, but the reality is far from perfect and we all know that our projects can't wait...  
 
 ## What is "nohoist" ?
 
-Is there a simple yet universal mechanism to allow these incompatibile libraries working in the monorepo environment? 
+Is there a simple yet universal mechanism that can allow these incompatibile libraries working in the monorepo environment? 
 
-Turns out there is. It's conveniently called _"nohoist"_, which has also been demonstrated in other monorepo tools like [lerna](https://github.com/lerna/lerna/blob/master/doc/hoist.md).
+Turns out there is, and is conveniently called _"nohoist"_, which has also been demonstrated in other monorepo tools like [lerna](https://github.com/lerna/lerna/blob/master/doc/hoist.md).
 
-"nohoist" enables monorepo projects to consume 3rd-party libraries not yet compatible with its hoisting scheme. The idea is to disable the selected modules from being hoisted to the project root. They were placed in the actual (child) project instead, just like in a standalone project.
+"nohoist" enables workspaces to consume 3rd-party libraries not yet compatible with its hoisting scheme. The idea is to disable the selected modules from being hoisted to the project root. They were placed in the actual (child) project instead, just like in a standalone, non-workspaces, project.
 
 Since most 3rd-party libraries already worked in standalone projects, the ability to simulate such environment within workspaces should be able to unblock many known compatibility issues. 
 
 ### a word of the caution
 
-While nohoist is useful, it does come with drawbacks. The most obvious one is the nohoist modules could be duplicated in multiple locations, defeating the purpose of hoisting. Therefore, we recommend to keep nohoist scope as small and explicit as possible.
+While nohoist is useful, it does come with drawbacks. The most obvious one is the nohoist modules could be duplicated in multiple locations, denying the benefit of hoisting mentioned above. Therefore, we recommend to keep nohoist scope as small and explicit as possible in your project.
 
 ## When will it be available?
 
-[nohoist PR #4979](https://github.com/yarnpkg/yarn/pull/4979) was merged on 1/29/2018. According to the [core team](https://github.com/yarnpkg/yarn/pull/4979#issuecomment-364486016), it should be deployed with **1.4.2** in mid Feb.
+[#4979](https://github.com/yarnpkg/yarn/pull/4979) was merged on 1/29/2018. According to the [core team](https://github.com/yarnpkg/yarn/pull/4979#issuecomment-364486016), it should be deployed with **1.4.2** in mid Feb...
 
 ## How to use it?
 
@@ -92,12 +93,14 @@ the package.json file in project root "monorepo":
   ...
 ```
 
-A few things to note:
+Let's take a closer look at the config:
 - **private package**
+
   nohoist is only available for private packages because workspaces are only available for private packages. 
 
 - **glob patterns matching**
-  Internally, yearn construct a virtual path for each module based on its dependency relationship, called module path. If this path matched the nohoist patterns provided, it will be hoisted to the closest workspace package instead. 
+
+  Internally, yearn construct a virtual module path for each module based on its "original" (before hoist) package dependency. If this path matched the nohoist patterns provided, it will be hoisted to the closest child project/package instead. 
 
   - module paths:
     - A = monorepo/A; the react-native under A = monorepo/A/react-native; metro under react-native = monorepo/A/react-native/metro; Y = monorepo/A/Y
@@ -108,10 +111,11 @@ A few things to note:
     - "**/react-native": 
       this tells yarn not to hoist the react-native package itself, no matter where it is. (shallow) 
       - the use of globstar "**" matches 0 to n elements prior to react-native, which means it will match any react-native occurrence no matter where it appear on the path.
-      - the pattern ends with "react-native" means react-native's dependencies, such as "react-natvie/metro", will not match this pattern;
+      - the pattern ends with "react-native" means react-native's dependencies, such as "react-natvie/metro", will not match this pattern, thus the term "shallow".
     - "**/react-native/\*\*": 
-      this tells yarn not to hoist any of the react-native's dependent libraries and their dependent libraries... (deep)...  
-      - the pattern ends with "\*\*", unlik prefix globstar mentioned above, matches 1 to n elements after react-native, which means only react-native's dependencies will match this pattern, but not react-native itself.
+      this tells yarn not to hoist any of the react-native's dependent libraries and their dependent libraries. (deep)  
+      - the pattern ends with "\*\*", unlik prefix globstar mentioned above, the suffix globstar matches 1 to n elements after react-native, which means only react-native's dependencies will match this pattern, but not react-native itself.
+      - not only react-native's direct dependencies match this pattern, their dependencies and so on will too, thus the term "deep".
 
     Combining these 2 patterns (shallow + deep), they instruct yarn not to hoist react-native and all of its dependencies. 
   
@@ -119,11 +123,11 @@ A few things to note:
 
  ![monorepo-example-file-2-a.svg](resources/monorepo-example-file-2-a.svg)
 
-  we can see module X and Y has been hoisted to root because "monorepo/A/Y", "monorepo/B/X" and "monorepo/C/Y" don't match any of the nohoist patterns. Note that even though "monorepo/B/X/reat-native" matches the nohoist pattern, "monorepo/B/X" doesn't.
+  we can see module X and Y has been hoisted to root because "monorepo/A/Y", "monorepo/B/X" and "monorepo/C/Y" don't match any of the nohoist patterns. Note that even though "monorepo/B/X/reat-native" matches the nohoist pattern, "monorepo/B/X" doesn't. Therefore the react-native modules will be left in package "B" while their original parent "X" being hoisted to the root. 
 
   react-native and metro have all been placed under package A and B respectively because they matched the react-native nohoist patterns. Note that even though B does not directly depends on react-native, they are still hoisted to "B", just like in a standalone project.
 
-  **nohoist pattern exercise:**
+  **more pattern exercise:**
   - what if we only want to apply react-native nohoist for package A? 
     ```
       "nohoist": ["A/react-native", "A/react-native/**"]
@@ -148,20 +152,21 @@ Below are the test projects we used when developing nohoist. They are now availa
 1. create react-native within yarn workspaces: 
   Confirming that we can pretty much following the react-native "getting started" guide.  
 1. create a more realistic monorepo project including both react and react-native fronting common functionality based on node.js modules:
+
   This should be a pretty common use case for many monorepo projects. Yes it is possible, and hopefully less painful than before. 
 
 These are working examples, i.e. you should be able to clone and run it by following the instructions there. If not, please let us know.
 
 ### Investigate 
-What if things didn't happen as you expected? Surprised how many modules in your local node_modules or nothing at all? Yarn has a powerful "[why](https://yarnpkg.com/en/docs/cli/why)" command that can report its hoisting reasons so you can investigate and help us to help you. 
+What if things didn't happen as you expected? Surprised how many modules in your local node_modules or nothing at all? Yarn has a powerful "[why](https://yarnpkg.com/en/docs/cli/why)" command that can report its hoisting reasons so you can investigate and indulge your curiosity... 
 
-This will be best explained with an actual [example](https://github.com/connectdotz/yarn-nohoist-examples/tree/master/workspaces-examples/react-native#under-the-hood)
+This will probably be best explained with an actual [example](https://github.com/connectdotz/yarn-nohoist-examples/tree/master/workspaces-examples/react-native#under-the-hood)
 
 ## Conclusion 
 
 nohoist is new and most likely need a few round of polishing. Please do let us know if something didn't seem right. It had already made our monorepo projects a lot easier, hopefully it will do the same for you.
 
-We would also like to call on the library owners to adapt your libraries for monorepo environment so maybe one day we can retire nohoist and all sharable modules can be hoisted to their rightful place...
+We would also like to call on the library owners to adapt your libraries for monorepo environment so maybe one day we can retire nohoist and all sharable modules can be hoisted to their rightful places...
 
 ## References
 - nohoist original proposal: [RFC #86](https://github.com/yarnpkg/rfcs/pull/86)
