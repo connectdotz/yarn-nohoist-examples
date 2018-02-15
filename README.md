@@ -4,16 +4,17 @@ _illustrate how to to use yarn for react/react-native projects in the monorepo e
 
 ## Introduction
 
-This repository was originally used to test the [nohoist](https://github.com/yarnpkg/yarn/pull/4979) implementation of [yarn](https://github.com/yarnpkg/yarn). We converted them into the following examples to help people using nohist in yarn workspaces. If you are not sure what nohoist is or if you can use it, you can read the [yarn nohoist](nohoist.md) first.
+This repository was originally used to test the [nohoist](https://github.com/yarnpkg/yarn/pull/4979) implementation for [yarn workspaces](https://yarnpkg.com/blog/2017/08/02/introducing-workspaces/). We converted them into the following examples to help people using nohoist in yarn workspaces. If you are not sure what nohoist is or wondering if you should use it, please read the [yarn nohoist](nohoist.md) first.
 
-examples:
+workspaces-examples:
 
 1. [react-native](workspaces-examples/react-native): step-by-step guide on how to set up a basic react-native monorepo project following react-native's getting started guide. 
 1. [universal-cipher](workspaces-examples/universal-cipher): a more complex example including react, react-native, and node.js modules, to explore a few common challenges a monorepo project frequently face in the real world.
 
 
 ### Environment: 
-Instruments in this repository are conducted based on the following:
+Instructions in this repository are conducted using on the following:
+
   - os: MacOS 10.13.3
   - yarn: v1.4.1-20180128.1637 (1.4.2 pre-release)
   - node: 8.9.1
