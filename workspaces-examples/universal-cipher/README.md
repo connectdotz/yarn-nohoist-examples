@@ -59,7 +59,9 @@ $ react-native run-android
 ```
 you should see the simple Cipher started in your simulator:
 
-![RNCipher-screenshot.png](resources/RNCipher-screenshot.png)
+<img src="resources/RNCipher-ios-screenshot.png" height="70%"/>
+<img src="resources/RNCipher-android-screenshot.png" height="70%"/>
+
 
 ### react-cipher
 to run it in the browser:
