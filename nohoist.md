@@ -1,6 +1,8 @@
 # nohoist for yarn workspaces
 
-Monorepo is gaining popularity as complexity and modularization of our software grow. As wonderful as [yarn workspaces](https://yarnpkg.com/blog/2017/08/02/introducing-workspaces/), the reset of the community hasn't yet fully caught up with its new hoisting scheme. While there are no lack of workarounds to bridge the gap, they are often complex and convoluted, simply because they had to maneuver around the actual end points: package-manager and the libraries. The introduction of the [nohoist](https://github.com/yarnpkg/yarn/pull/4979) is the attempt to provide an easy-to-use mechanism, natively supported by yarn, to enable workspaces working with otherwise incompatible libraries. We hope this feature would ease the pain for monorepo developers and strike a balance between efficiency (hoisting as much as possible) and usability (unblock the libraries who haven't been adapted for workspaces). 
+As wonderful as [yarn workspaces](https://yarnpkg.com/blog/2017/08/02/introducing-workspaces/), the rest of the community hasn't yet fully caught up with its new hoisting scheme. The introduction of the [nohoist](https://github.com/yarnpkg/yarn/pull/4979) is the attempt to provide an easy-to-use mechanism, natively supported by yarn, for enabling workspaces working with otherwise incompatible libraries. 
+
+We hope this feature would ease the pain for monorepo developers and strike a balance between efficiency (hoisting as much as possible) and usability (unblock the libraries who haven't been adapted for workspaces). 
 
 ## What is the problem ?
 
@@ -67,7 +69,7 @@ export type WorkspacesConfig = {
 ```
 For those who don't need nohoist, the old workspaces format will continue to be supported. 
 
-nohoist rules are just a collection of [glob patterns](https://github.com/isaacs/minimatch) used to match against the module path in its dependency tree. Module path is a virtual path of the dependency tree, not an actual file path, so no need to specify "node_modules". 
+nohoist rules are just a collection of [glob patterns](https://github.com/isaacs/minimatch) used to match against the module path in its dependency tree. Module path is a virtual path of the dependency tree, not an actual file path, so no need to specify "node_modules" or "packages". 
 
 ### illustration 
 
