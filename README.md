@@ -1,6 +1,6 @@
 # yarn-nohoist-examples
 
-_illustrate how to to use yarn for react/react-native projects in the monorepo environment_
+_demonstrate how to to use yarn for react/react-native projects in the monorepo environment_
 
 ## Introduction
 
@@ -16,7 +16,7 @@ workspaces-examples:
 Instructions in this repository are conducted using on the following:
 
   - os: MacOS 10.13.3
-  - yarn: v1.4.1-20180128.1637 (1.4.2 pre-release)
+  - yarn: 1.4.1-20180211.22367 (1.4.2 pre-release)
   - node: 8.9.1
   - npm: 4.6.1
   - react-native: 0.52.x

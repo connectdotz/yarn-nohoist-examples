@@ -21,7 +21,7 @@ Both examples above face the same problem that react-native not able to find hoi
   }
 }
 ```
-Note: to see more info on nohoist patterns, check out [yarn nohoist](). 
+Note: to see more info on nohoist patterns, check out [yarn nohoist](../../nohoist.md). 
 
 ### Common issues
 
@@ -29,11 +29,7 @@ Here are some common issues we had experienced during create and initial run, al
 
 - No bundle url present
 
-  when you start the app and see the red screen on your simulator, and reload didn't seem to fix it... try to reset the cache/watchman then restart the run command while *keeping the react packager running*. For example, on ios:
-```
-$ watchman watch-del-all; rm -fr $TMPDIR/react-*; rm -rf $TMPDIR/haste-map-react-native-packager-*; yarn cache clean
-$ react-native run-ios
-```
+  this is a [known issue](https://github.com/facebook/react-native/issues/12754), rerun the react-native while keeping the packager running usually fixed it.
 
 - react-native can't start, asking to run "npm install" or there is a "package.lock" in your app directory...
 

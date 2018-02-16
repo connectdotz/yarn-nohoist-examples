@@ -29,7 +29,7 @@ There are 3 packages in the workspaces:
 
 ### environment
   - os: MacOS 10.13.3
-  - yarn: v1.4.1-20180128.1637 (1.4.2 pre-release)
+  - yarn: 1.4.1-20180211.22367 (1.4.2 pre-release)
   - node: 8.9.1
   - npm: 4.6.1
   - react-native: 0.52.x
@@ -40,7 +40,6 @@ There are 3 packages in the workspaces:
 1. follow [react](https://facebook.github.io/react-native/docs/getting-started.html) and [react-native](https://facebook.github.io/react-native/docs/getting-started.html) guide to prepare your environment.
 1. clone this repo
 1. in project root directory, run `yarn install` 
-    - _note: you might need to do it twice, see [known issues](#known-issues)_ 
 1. optionally, you can run `yarn test` in each package to check installation
     - _note: you will probably see react-cipher test failed, see [known issues](#known-issues)  below_
 
@@ -58,12 +57,19 @@ or android emulator:
 $ cd packages/RNCipher
 $ react-native run-android
 ```
+you should see the simple Cipher started in your simulator:
+
+![RNCipher-screenshot.png](resources/RNCipher-screenshot.png)
+
 ### react-cipher
 to run it in the browser:
 ```
 $ cd packages/react-cipher
 $ yarn start
 ```
+you should see the simple Cipher started in your browser:
+
+![react-cipher-screenshot.png](resources/react-cipher-screenshot.png)
 
 ## behind the scene
 
@@ -149,11 +155,8 @@ We have also explored the following popular alternatives for resolving node modu
     
 ## Known Issues
 
-### yarn error
-during yarn install/add/remove operations, sometimes you might encounter error message like this:
-  > error An unexpected error occurred: "ENOENT: no such file or directory, lstat ...
-
-  just rerun the yarn command again often clear the issue. (We should investigate the root cause ... added to TODO) 
+### RNCipher: - No bundle url present
+this is a [known issue](https://github.com/facebook/react-native/issues/12754), rerun the react-native while keeping the packager running usually fixes it.
 
 ### react-cipher test failed 
   You will most likely see the following error if you run yarn test in react-cipher: 
@@ -166,7 +169,7 @@ during yarn install/add/remove operations, sometimes you might encounter error m
   
       In reality, we are going to use many other 3rd party libraries that we have no control over its distribution mechanisms and, not surprisingly, one of the most challenging issues in many react/react-native projects. Therefore, we decided to simulate this use case and not transpile our own "cipher-core".
 
-  1. **let jest transpile cipher-core**. react-scripts transpile the dependencies through webpack but didn't perform the same for jest. IMHO, this is a discrepancy worth to address, such as allowing developers to override the `transformIgnorePatterns` so we can bring the transpile policy to parity. Until this is addressed, you can either eject the app or directly modify the `createJestConfig.js` in react-cipher/node_modules/react-scripts/scripts/utils (note your change will be lost when node_modules changes): replace `transformIgnorePatterns` with the something like this:
+  1. **let jest transpile cipher-core**. react-scripts transpile the dependencies through webpack but didn't perform the same for jest. IMHO, this is a discrepancy worth to address, such as allowing developers to override the `transformIgnorePatterns` so we can bring the transpile policy to parity. Until this is addressed, you can either eject the app or directly modify the `createJestConfig.js` in react-cipher/node_modules/react-scripts/scripts/utils (note your change will be lost when node_modules changes): replace `transformIgnorePatterns` with something like this:
       ```
       transformIgnorePatterns: [
         "universal-cipher/node_modules", 
@@ -179,5 +182,4 @@ during yarn install/add/remove operations, sometimes you might encounter error m
       To eject the app just for a rather minor jest config change didn't feel right. We were hoping to convince CRA to adopt `transformIgnorePatterns` customization, therefore leave this package to demonstrate the use case.
 
 ## TODO
-- [ ] investigate why yarn install/add/remove failed first time
 - [ ] follow up with create-react-app for jest test failure fix (customizing "transformIgnorePatterns")
