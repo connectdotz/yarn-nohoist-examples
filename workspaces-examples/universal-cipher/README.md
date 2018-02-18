@@ -110,7 +110,7 @@ Below is the yarn workspaces configure from the [package.json](package.json) und
 - **4**: this tells yarn not to hoist cipher-core for any workspace referencing it. Both react-ciper and RNCipher depends on cipher-core. yarn will create a symlink to the actual cipher-core under each package's node_modules.
 - **5 - 8**: these tell yarn not to hoist any module and their dependencies with name "vm-borwserify" or prefixed with "react-native-" under RNCipher workspace. These modules are react-native adapted node modules, which will be bundled by react-native's bundler `metro`. 
 
-General introduction of nohoist can be found [here](../../nohoist.md). 
+General introduction of nohoist can be found [here](https://yarnpkg.com/blog/2018/02/15/nohoist/d). 
 
 #### react-native node module mapping 
 Handling node modules in react-native turns out to be quite a challenge, even more than hoisting ;-). Fortunately, now have more options, like nohoist, to work around these problems.

@@ -21,7 +21,7 @@ Both examples above face the same problem that react-native not able to find hoi
   }
 }
 ```
-Note: to see more info on nohoist patterns, check out [yarn nohoist](../../nohoist.md). 
+Note: to see more info on nohoist patterns, check out [nohoist in workspaces](https://yarnpkg.com/blog/2018/02/15/nohoist/). 
 
 ### Common issues
 

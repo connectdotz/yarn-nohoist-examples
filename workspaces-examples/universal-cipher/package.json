@@ -21,7 +21,6 @@
     "reset-yarn": "yarn cache clean",
     "reset-rn": "watchman watch-del-all; rm -fr $TMPDIR/react-*; rm -rf $TMPDIR/haste-map-react-native-packager-*",
     "reset-cache": "yarn reset-yarn && yarn reset-rn",
-    "reset": "yarn reset-modules && yarn reset-cache",
-    "build": "cd packages/cipher-core; yarn build"
+    "reset": "yarn reset-modules && yarn reset-cache"
   }
 }
