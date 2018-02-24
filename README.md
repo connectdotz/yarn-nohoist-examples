@@ -1,10 +1,10 @@
 # yarn-nohoist-examples
 
-_demonstrate how to to use yarn for react/react-native projects in the monorepo environment_
+_demonstrate how to to use "nohoist" in yarn workspaces environment_
 
 ## Introduction
 
-This repository was originally used to test the [nohoist](https://github.com/yarnpkg/yarn/pull/4979) implementation for [yarn workspaces](https://yarnpkg.com/blog/2017/08/02/introducing-workspaces/). We converted them into the following examples to help people using nohoist in yarn workspaces. If you are not sure what nohoist is or wondering if you should/shouldn't use it, please read the [nohoist in workspaces](https://yarnpkg.com/blog/2018/02/15/nohoist/) first.
+This repository contains examples of using nohoist in react/react-native workspaces. To get a more comprehensive introduction, please see [nohoist in yarn workspaces](https://yarnpkg.com/blog/2018/02/15/nohoist/).
 
 workspaces-examples:
 
