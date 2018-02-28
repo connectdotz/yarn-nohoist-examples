@@ -11,7 +11,10 @@
       "**/react-native-scripts",
       "**/react-native-scripts/**",
       "**/expo",
-      "**/expo/**"
+      "**/expo/**",
+      "**/jest-expo",
+      "**/jest-expo/**"
+      
     ]
   }
 }
