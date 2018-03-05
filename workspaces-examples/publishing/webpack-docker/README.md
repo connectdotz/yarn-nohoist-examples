@@ -1,4 +1,14 @@
 # experiment publishing workspaces to docker with webpack 
+## structure
+```
+webpack-docker 
+|__ docker, yarn.lock
+|__ packages
+|____ utils (shared modules)
+|____ w1 (depends on utils)
+|____ w2 (depends on utils and w1) - docker, webpack
+|______ docker, webpack
+```
 ## installation
 install all packages, build the app (w2) via [webpack](#why-webpack), run tests, then run app to make sure it works outside of docker environment. 
 ```
