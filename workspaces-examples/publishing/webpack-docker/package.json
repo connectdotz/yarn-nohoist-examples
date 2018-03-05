@@ -1,0 +1,27 @@
+{
+  "name": "with-lerna",
+  "version": "1.0.0",
+  "description": "demonstrate how to publish individual packages with lerna",
+  "main": "index.js",
+  "author": "vsun@connectdotz.com",
+  "license": "MIT",
+  "private": true,
+  "workspaces": {
+    "packages": ["packages/*"]
+  },
+  "scripts": {
+    "reset-modules": "rm -rf node_modules/ yarn.lock packages/*/node_modules",
+    "reset-yarn": "yarn cache clean",
+    "reset": "yarn reset-modules && yarn reset-yarn",
+    "all-tests": "lerna run test",
+    "build": "yarn all-tests && lerna run build",
+    "run-app": "node packages/w2/dist/bundle.js",
+    "docker-build": "docker build -t app -f Dockerfile .",
+    "docker-sh": "docker run -it --rm app /bin/bash",
+    "docker-run": "docker run app"
+  },
+  "devDependencies": {
+    "eslint": "^4.18.2",
+    "lerna": "^2.9.0"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "utils",
+  "version": "1.0.1",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "eslint": "^4.18.2",
+    "jest": "^22.4.2"
+  }
+}

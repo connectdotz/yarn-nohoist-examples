@@ -1,0 +1,32 @@
+{
+  "name": "w2",
+  "version": "1.0.1",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "utils": "^1.0.1",
+    "w1": "^1.0.1"
+  },
+  "devDependencies": {
+    "babel-jest": "^22.4.1",
+    "babel-loader": "^7.1.3",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "eslint": "^4.18.2",
+    "jest": "^22.4.2",
+    "webpack": "^4.1.0",
+    "webpack-cli": "^2.0.10",
+    "webpack-node-externals": "^1.6.0"
+  },
+  "scripts": {
+    "test": "jest",
+    "build": "rm -rf ./dist && webpack --config webpack.config.js",
+    "start": "yarn build && node ./dist/bundle.js",
+    "docker-build": "docker build -t hello -f Dockerfile .",
+    "docker-sh": "docker run -it --rm hello /bin/bash",
+    "docker-run": "docker run hello"
+  },
+  "jest": {
+    "transformIgnorePatterns": ["<rootDir>/packages/?!(utils)"]
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "w1",
+  "version": "1.0.1",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "utils": "^1.0.1"
+  },
+  "devDependencies": {
+    "babel-jest": "^22.4.1",
+    "babel-preset-env": "^1.6.1",
+    "eslint": "^4.18.2",
+    "jest": "^22.4.2"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "jest": {
+    "transformIgnorePatterns": [
+      "<rootDir>/packages/?!(utils)"
+    ]
+  }
+}
