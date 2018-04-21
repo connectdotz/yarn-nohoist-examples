@@ -41,7 +41,7 @@ There are 3 packages in the workspaces:
 1. clone this repo
 1. in project root directory, run `yarn install` 
 1. optionally, you can run `yarn test` in each package to check installation
-    - _note: you will probably see react-cipher test failed, see [known issues](#known-issues)  below_
+    - _note: react-cipher test will probably fail, see [known issues](#known-issues)  below_
 
 ## run
 
@@ -49,7 +49,7 @@ There are 3 packages in the workspaces:
 to run it in ios simulator:
 ```
 $ cd packages/RNCipher
-$ react-native run-iios
+$ react-native run-ios
 ```
 
 or android emulator:
@@ -139,6 +139,18 @@ The node modules of course do not exist in mobile environment, fortunately most 
 3. **global shimming**
     We know that some node libraries expect common global variables, such as Buffer and process. In addition, the crypto library dependency [pbkdf2](), raised exception for `process.version.split` because the process module doesn't have the "version" property. Therefore we created a simple [global-shim.js](packages/RNCipher/global-shim.js) to patch up some global assumptions, including assigning a "version" to the global process if not found. This file needs to be included as early as possible, thus in [index.js](https://github.com/connectdotz/yarn-nohoist-examples/blob/master/workspaces-examples/universal-cipher/packages/RNCipher/index.js) 
 
+4. **multi roots**
+    When you start to add additional modules, some of them might get hoisted to the root and you might start to see the following error message from Metro when starting the app (see issue #4):
+
+    ```
+    Metro Bundler ready.
+
+    Loading dependency graph, done.
+    error: bundling failed: Error: Unable to resolve module `react-redux` from `/Users/cmcewen/code/yarn-nohoist-examples/workspaces-examples/universal-cipher/packages/RNCipher/App.js`: Module does not exist in the module map or in these directories:
+    /Users/cmcewen/code/yarn-nohoist-examples/workspaces-examples/universal-cipher/node_modules
+    ```
+
+    you can help metro bundler to find your modules by providing the additional search directories via `getProjectRoots()` in [rn-cli.config.js](packages/RNCipher/rn-cli.config.js). 
     
 ##### alternatives
 We have also explored the following popular alternatives for resolving node module compatibility: 
